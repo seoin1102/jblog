@@ -13,7 +13,6 @@
 	<div class="center-content">
 	<c:import url="/WEB-INF/views/includes/center-content.jsp" />
 		<form class="search-form">
-		<div class="logo"></div>
 			<fieldset>
 				<input type="text" name="keyword" />
 				<input type="submit" value="검색" />

@@ -186,6 +186,8 @@ public class BlogController {
 		}
 		if(result.hasErrors()) {
 			model.addAllAttributes(result.getModel());
+			List<CategoryVo> list = categoryService.getCategory(id);
+			model.addAttribute("list", list);
 			return "blog/admin/write";
 		}
 		Long no = categoryService.getCategoryNo(id, category);
