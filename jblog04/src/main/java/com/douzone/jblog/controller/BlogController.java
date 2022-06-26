@@ -43,6 +43,8 @@ public class BlogController {
 	@Autowired
 	private CategoryService categoryService;
 
+	@Autowired
+	private UserService userService;
 	
 	@RequestMapping({"", "/{pathNo1}", "/{pathNo1}/{pathNo2}"})
 	public String index(
@@ -58,10 +60,14 @@ public class BlogController {
 		List<PostVo> list2 = postService.getPostList(id);
 		BlogVo blogVo = blogService.getContents(id);
 		
+		List<String>userList = userService.getAllUser();
+	    if(!userList.contains(id)) {
+	         return "redirect:/";
+	      }
+		
 		if(list2.isEmpty()) {
 			postVo.setTitle("");
 			postVo.setContents("");
-			
 			list2.add(postVo);
 		}
 		
@@ -124,7 +130,9 @@ public class BlogController {
 			return "redirect:/";
 		}
 		List<CategoryVo> list = categoryService.getCategory(id);
+		BlogVo blogVo = blogService.getContents(id);
 		model.addAttribute("list", list);
+		model.addAttribute("blogVo", blogVo);
 		return "blog/admin/category";
 	}
 	
@@ -142,7 +150,9 @@ public class BlogController {
 		}
 		categoryService.addCategory(id, name, desc);
 		List<CategoryVo> list = categoryService.getCategory(id);
+		BlogVo blogVo = blogService.getContents(id);
 		model.addAttribute("list", list);
+		model.addAttribute("blogVo", blogVo);
 		return "blog/admin/category";
 	}
 	
@@ -154,7 +164,9 @@ public class BlogController {
 		categoryService.deleteCategory(categoryVo);
 
 		List<CategoryVo> list = categoryService.getCategory(authUser.getId());
+		BlogVo blogVo = blogService.getContents(authUser.getId());
 		model.addAttribute("list", list);
+		model.addAttribute("blogVo", blogVo);
 		return "blog/admin/category";
 	}
 	
@@ -168,7 +180,9 @@ public class BlogController {
 			return "redirect:/";
 		}
 		List<CategoryVo> list = categoryService.getCategory(id);
+		BlogVo blogVo = blogService.getContents(id);
 		model.addAttribute("list", list);
+		model.addAttribute("blogVo", blogVo);
 		return "blog/admin/write";
 	}
 	
@@ -181,6 +195,8 @@ public class BlogController {
 			Model model,
 			@ModelAttribute @Valid PostVo postVo,
 			BindingResult result) {
+		BlogVo blogVo = blogService.getContents(id);
+		model.addAttribute("blogVo", blogVo);
 		if(!authUser.getId().equals(id)) {
 			return "redirect:/";
 		}
@@ -194,16 +210,14 @@ public class BlogController {
 		postVo.setNo(no);
 		postVo.setTitle(postVo.getTitle());
 		postVo.setContents(postVo.getContents());
-		System.out.println(postVo);
 
 		postService.addPost(postVo);
-		
 		postVo.setNo(postVo.getNo());
 		postVo.setTitle(postVo.getTitle());
 		postVo.setContents(postVo.getContents());
 		List<CategoryVo> list = categoryService.getCategory(id);
 		model.addAttribute("list", list);
-		
+	
 		return "blog/admin/write";
 	}
 }

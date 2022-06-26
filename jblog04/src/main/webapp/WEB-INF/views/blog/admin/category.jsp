@@ -40,7 +40,7 @@
 				</table>
       			<form 
 				method="post" 
-				action="${pageContext.request.contextPath }/${authUser.id}/admin/category"">
+				action="${pageContext.request.contextPath }/${authUser.id}/admin/category">
       			<h4 class="n-c">새로운 카테고리 추가</h4>
 		      	<table id="admin-cat-add" >
 		      		<tr>
